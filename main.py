@@ -233,9 +233,19 @@ def menu_equipar_arma(jugador):
 
 
 def main():
-    print('-------------------------------------')
-    print('          Survival-Forest-RPG')
-    print('-------------------------------------')
+    print('    -------------------------------------')
+    print('             Survival-Forest-RPG')
+    print('    -------------------------------------\n')
+    inicio_historia = """
+    Despiertas en un camino polvoriento sin recordar nada.
+    A lo lejos ves un pequeño pueblo rodeado de murallas.
+    Un guardia te mira sorprendido.
+    —¿Otro recien llegado? Entra… aqui estaras a salvo.
+    Asi comienza tu nueva vida. 
+    """
+    print(inicio_historia)
+    #falta introducir la historia en diferentes partes
+    #del juego.
 
     personajes_base = obtener_personajes_base() #obtiene los personajes base
     monstruos_base = obtener_monstruos_base() #obtiene los monstruos base
