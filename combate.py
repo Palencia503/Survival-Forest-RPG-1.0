@@ -1,5 +1,6 @@
 import random
 from Personaje import Personaje, Monstruo
+from Objetos import Arma, Pocion
 from LimpiarPantalla import limpiar_terminal
 
 def combate(jugador, monstruo):
@@ -47,28 +48,53 @@ def combate(jugador, monstruo):
     #RESULTADO FINAL
     if jugador.hp <= 0:
         print("\nHas sido derrotado...")
-        return "jugador_muerto"
+        return "derrota"
 
     print("\n¡Has vencido al monstruo!")
     monstruo.morir()
 
     #recompensa del monstruo
     recompensa = monstruo.recompensa
+
+    # oro
     if "oro" in recompensa:
         jugador.dinero += recompensa["oro"]
         print(f"Has ganado {recompensa['oro']} monedas de oro.")
 
-    #objetos (armas, pociones, otros)
+    #objetos
     if "tipo" in recompensa:
-        jugador.inventario[recompensa["tipo"]].append(recompensa)
-        print(f"Has obtenido: {recompensa['nombre']}")
+        if recompensa["tipo"] == "armas":
 
-    #Recompensas
+            dano = 0
+            defensa = 0
+
+            if "dano" in recompensa:
+                dano = recompensa["dano"]
+
+            if "defensa" in recompensa:
+                defensa = recompensa["defensa"]
+
+            arma = Arma("arma", 1, recompensa["nom"], 0, dano, defensa)
+            jugador.inventario["armas"].append(arma)
+
+            print(f"Has obtenido un arma: {recompensa['nom']}")
+
+        elif recompensa["tipo"] == "pociones":
+            jugador.inventario["pociones"].append(recompensa["nom"])
+            print(f"Has obtenido una poción: {recompensa['nom']}")
+
+        else:
+            jugador.inventario["otros"].append(recompensa["nom"])
+            print(f"Has obtenido: {recompensa['nom']}")
+
+    #exp y oro
     exp = 20
     oro = random.randint(10, 50)
     jugador.exp += exp
     jugador.dinero += oro
 
     print(f"Ganaste {exp} EXP y {oro} monedas de oro.")
-
     return "victoria"
+
+
+

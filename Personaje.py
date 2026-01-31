@@ -16,6 +16,9 @@ class Personaje:
         self.escudo = escudo
         self.ataque = ataque
 
+        self.defensa_base = 0   #defensa natural del personaje
+        self.escudo = 0         
+
         self.dinero = 100 #para pruebas
         self.exp = 0
         self.exp_necesaria = 100
@@ -45,6 +48,7 @@ class Personaje:
 
         input("\nENTER para continuar...")
 
+    #muetra las pociones
     def mostrar_pociones(self):
         limpiar_terminal()
         print("- - POCIONES - -")
@@ -58,6 +62,7 @@ class Personaje:
 
         input("\nENTER para continuar...")
 
+    #muestra otros objetos
     def mostrar_otros(self):
         limpiar_terminal()
         print("- - OTROS - -")
@@ -71,19 +76,28 @@ class Personaje:
 
         input("\nENTER para continuar...")
     #equipar arma
-    def equipar_arma(self, nom, dano): 
+    def equipar_arma(self, nom, dano, defensa):
         dano_final = dano 
         arma_correcta = armas_clase[self.clase.lower()]
 
-        #penalizacion si no es el arma correcta
+        # penalizacion si no es el arma correcta
         if arma_correcta not in nom.lower(): 
-            dano_final = int(dano - (dano * 0.5)) #resta 50%            
+            dano_final = int(dano - (dano * 0.5))           
             print(f"{self.clase} no domina esta arma, hace menos dano.") 
 
         self.arma["nom"] = nom 
         self.arma["dano"] = dano_final 
-                
+
+        #si el arma es un escudo, SUMAR defensa al escudo actual
+        if "escudo" in nom.lower():
+            self.escudo = self.escudo + defensa
+        else:
+            #si no es escudo, vuelve a defensa base
+            self.escudo = self.defensa_base
+
         print(f"{self.clase} se ha equipado {nom} con {dano_final} de dano.")
+        if defensa > 0:
+            print(f"Defensa total aumentada a {self.escudo}.")
 
     #desequipar arma
     def desequipar_arma(self):
@@ -97,7 +111,7 @@ class Personaje:
         print("-- POCIONES --")
 
         pociones = self.inventario["pociones"]
-
+        #si no tienes pociones
         if not pociones:
             print("No tienes pociones.")
             input("ENTER...")
@@ -107,13 +121,14 @@ class Personaje:
             print(f"{i}. {p}")
 
         usar = input("ID pocion: ")
+        #si no es numero
         if not usar.isdigit():
             print("Opcion no valida.")
             input("ENTER...")
             return
 
         idx = int(usar) - 1
-
+        #control para que se utilicen numero correctos y no negativos.
         if idx < 0 or idx >= len(pociones):
             print("Opcion fuera de rango.")
             input("ENTER...")
@@ -124,7 +139,7 @@ class Personaje:
         self.ataque += pocion.dano
         del pociones[idx]
 
-        print(f"Has usado {pocion.nombre}.")
+        print(f"Has usado {pocion.nom}.")
         input("ENTER...")
 
 
@@ -132,6 +147,7 @@ class Personaje:
     def estado(self):
         print(f'CLASE: {self.clase}')
         print(f'HP: {self.hp}')
+        print(f'MANA: {self.mana}')
         print(f'ESCUDO: {self.escudo}')
         print(f'ATAQUE: {self.ataque}')
         print(f'EXP: {self.exp}')
@@ -151,7 +167,7 @@ class Personaje:
             #aumentar dificultad: cada nivel se necesita +20% EXP
             self.exp_necesaria = int(self.exp_necesaria * 1.2)
 
-            # mejoras por clase
+            #mejoras por clase
             if self.clase.lower() == "tanque":
                 self.hp += 20
                 self.escudo += 10

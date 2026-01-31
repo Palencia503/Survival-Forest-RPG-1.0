@@ -67,7 +67,7 @@ class Tienda:
             32: Arma("escudo", 2, "Escudo legendario", 500, dano = 40, defensa = 40),
         }
 
-
+    #mostrar inventario
     def mostrar_inventario(self): 
         print("\n- - Tienda de Objetos - -") 
         for categoria, items in self.inventario.items(): 
@@ -77,33 +77,33 @@ class Tienda:
                 print(f"{id_item}. {objeto}") 
 
         print("\n0. Salir") 
-
+    #comprar objetos del inventario
     def comprar(self, id_buscado, jugador): 
         for categoria, items in self.inventario.items(): 
             if id_buscado in items: 
                 objeto = items[id_buscado] 
-
+                #comprueba que haya stok
                 if objeto.cantidad <= 0: 
                     print("No queda stock.") 
                     return 
-
+                #comprueba que el jugador tenga dinero suficiente
                 if jugador.dinero < objeto.precio: 
                     print("No tienes suficiente dinero.") 
                     return 
 
-                jugador.dinero -= objeto.precio 
-                objeto.cantidad -= 1 
-                objeto_copia = objeto.clonar() 
-
+                jugador.dinero -= objeto.precio   #le quita ek dinero que cuesta el objeto
+                objeto.cantidad -= 1              #resta 1 del stok
+                objeto_copia = objeto.clonar()    #lo clona
+                #si es pocion lo añade a pociones en inventario
                 if objeto.tipo == "pocion": 
                     jugador.inventario["pociones"].append(objeto_copia) 
-
+                #si es un arma la añade a armas
                 elif objeto.tipo in ("espada", "arco", "daga", "varita", "escudo"): 
                     jugador.inventario["armas"].append(objeto_copia) 
-
+                #sino lo añade a otros
                 else: jugador.inventario["otros"].append(objeto_copia)
-
-                print(f"Has comprado {objeto.nombre}") 
+                #dice el nombre del objeto que compras
+                print(f"Has comprado {objeto.nom}") 
                 return
         
         print("Objeto no disponible.")
