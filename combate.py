@@ -6,13 +6,13 @@ from LimpiarPantalla import limpiar_terminal
 def combate(jugador, monstruo):
     print(f"\n{jugador.clase} vs {monstruo.clase}")
     ronda = 1 
-
+    #combate si los dos tienen vida
     while jugador.hp > 0 and monstruo.hp > 0:
         print(f"\n- - Ronda {ronda} - -")
         ronda += 1
 
         print(f"{jugador.clase} HP: {jugador.hp} | {monstruo.clase} HP: {monstruo.hp}")
-
+        #huir o atacar
         accion = input("¿Que quieres hacer? (a = atacar / h = huir): ").lower()
         if accion in ("h", "huir"):
             print("Has huido del combate.")
@@ -56,7 +56,7 @@ def combate(jugador, monstruo):
     #recompensa del monstruo
     recompensa = monstruo.recompensa
 
-    # oro
+    #oro
     if "oro" in recompensa:
         jugador.dinero += recompensa["oro"]
         print(f"Has ganado {recompensa['oro']} monedas de oro.")
@@ -64,7 +64,6 @@ def combate(jugador, monstruo):
     #objetos
     if "tipo" in recompensa:
         if recompensa["tipo"] == "armas":
-
             dano = 0
             defensa = 0
 
@@ -76,7 +75,6 @@ def combate(jugador, monstruo):
 
             arma = Arma("arma", 1, recompensa["nom"], 0, dano, defensa)
             jugador.inventario["armas"].append(arma)
-
             print(f"Has obtenido un arma: {recompensa['nom']}")
 
         elif recompensa["tipo"] == "pociones":
